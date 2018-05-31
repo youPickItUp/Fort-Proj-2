@@ -13,12 +13,14 @@ contains
         real (kind = 8), intent(out) :: multiply(:,:) ! macierz wynikowa
         integer (kind = 4), intent(out) :: status ! kod błędu, 0 gdy OK
 
-        integer (kind = 4) :: i,j ! zmienne incrementowane w petlach
+        integer (kind = 4) :: i,j,k ! zmienne incrementowane w petlach
 
         ! jezeli wymiary sie nie zgadzaja mnozenie nie ma sensu
         if(size(first, 2) .NE. size(second, 1)) then
             status = 1
             return
+        else
+            status = 0
         end if
 
         multiply = 0
@@ -30,7 +32,7 @@ contains
                 end do elems
             end do multiply_rows
         end do multiply_columns
-        
+
     end subroutine
 
 end module matrix_mul
