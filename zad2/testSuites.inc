@@ -1,0 +1,3 @@
+ADD_TEST_SUITE(matrixMul_only_dotp_suite)
+ADD_TEST_SUITE(matrixMul_only_cache_suite)
+ADD_TEST_SUITE(matrixMul_both_suite)
