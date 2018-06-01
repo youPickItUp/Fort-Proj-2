@@ -2,6 +2,11 @@
 *.swp
 *.out
 *.o
+*.txt
+t_matmul
+t_dotp
+t_cache
+t_both
 
 test.f90
 test
