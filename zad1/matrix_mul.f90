@@ -23,6 +23,13 @@ contains
             status = 0
         end if
 
+        ! jezeli macierz wynikowa nie pasuje do multiply zwracam blad
+        if((size(multiply, 1) .NE. size(first, 1)) .OR. &
+           (size(multiply, 2) .NE. size(second, 2))) then
+            status = 2
+            return
+        end if
+
         multiply = 0
 
         multiply_columns: do i=1, size(first, 1)

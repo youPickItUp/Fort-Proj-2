@@ -1,5 +1,7 @@
 *.mod
 *.swap
 *.out
+*.o
 
 test.f90
+test
