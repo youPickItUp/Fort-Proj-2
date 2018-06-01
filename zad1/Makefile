@@ -20,3 +20,6 @@ test: testSuites.inc matrix_mul.o $(OBJS)
 	$(FF) -o $@ -I. -I$(PFUNIT)/mod -I$(PFUNIT)/include \
 		$(PFUNIT)/include/driver.F90 \
 		./*$(OBJ_EXT) $(LIBS) $(FFLAGS)
+
+clean:
+	rm -f test

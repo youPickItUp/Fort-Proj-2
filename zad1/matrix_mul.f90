@@ -32,13 +32,13 @@ contains
 
         multiply = 0
 
-        multiply_columns: do i=1, size(first, 1)
-            multiply_rows: do j=1, size(second, 2)
-                elems: do k=1, size(first, 2)
+        multiply_rows: do j=1, size(second, 2)
+            elems: do k=1, size(first, 2)
+                multiply_columns: do i=1, size(first, 1)
                     multiply(i,j) = multiply(i,j) + first(i,k) * second(k,j)
-                end do elems
-            end do multiply_rows
-        end do multiply_columns
+                end do multiply_columns
+            end do elems
+        end do multiply_rows
 
     end subroutine
 
