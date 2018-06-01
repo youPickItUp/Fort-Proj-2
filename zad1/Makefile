@@ -1,4 +1,5 @@
 FF=gfortran
+F90_VENDOR=GNU
 include $(PFUNIT)/include/base.mk
 
 FFLAGS += -ffree-form -std=f2008 -cpp -Wall -I$(PFUNIT)/mod

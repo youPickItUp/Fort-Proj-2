@@ -1,4 +1,5 @@
 FF= gfortran
+F90_VENDOR=GNU
 FFLAGS=-ffree-form -std=f2008 -fimplicit-none -funroll-loops -Wall -O2
 
 .PHONY: all
