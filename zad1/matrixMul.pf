@@ -1,0 +1,226 @@
+! macierze jednostkowe
+@test
+subroutine test_one_on_one()
+   use pfunit_mod
+   use matrix_mul, only: mm
+   implicit none
+   real (kind=8), dimension(1,1) :: multiply
+   !real (kind=8), dimension(3,2) :: first
+   !real (kind=8), dimension(2,3) :: second
+
+   integer (kind=4) :: state
+
+   !first =
+   !second =
+   call mm(RESHAPE((/2.0D0/),(/1,1/)), &
+           RESHAPE((/3.0D0/),(/1,1/)), &
+           multiply, state)
+   @assertEqual(state, 0, 'State przy macierzach jednostkowych.')
+   @assertEqual(multiply, RESHAPE((/6.0D0/),(/1,1/)), 'Wynik mnozenia jednostkowych.')
+end subroutine test_one_on_one
+
+! macierz 1 x N
+@test
+subroutine test_one_on_N()
+   use pfunit_mod
+   use matrix_mul, only: mm
+   implicit none
+   real (kind=8), dimension(100,100) :: multiply
+   real (kind=8), dimension(100,1) :: first
+   real (kind=8), dimension(1,100) :: second
+   real (kind=8), dimension(100,100) :: m_to_compare
+
+   integer (kind=4) :: state
+
+   first = 17.0D0
+   second = 2.0D0
+
+   m_to_compare = 34.0D0
+
+   call mm(first, second, multiply, state)
+   @assertEqual(state, 0, 'State przy macierzach 1xN.')
+   @assertEqual(multiply, m_to_compare,'Wynik mnozenia 1xN.')
+
+end subroutine test_one_on_N
+
+! macierz N x 1
+@test
+subroutine test_N_no_one()
+   use pfunit_mod
+   use matrix_mul, only: mm
+   implicit none
+   real (kind=8), dimension(1,1) :: multiply
+   real (kind=8), dimension(100,1) :: first
+   real (kind=8), dimension(1,100) :: second
+
+   integer (kind=4) :: state
+
+   first = 17.0D0
+   second = 2.0D0
+
+   call mm(second, first, multiply, state)
+   @assertEqual(state, 0,'State przy macierzach Nx1.')
+   @assertEqual(multiply, RESHAPE((/34.0D2/),(/1,1/)),'Wynik mnozenia Nx1.')
+
+end subroutine test_N_no_one
+
+! macierz duza
+@test
+subroutine test_big_one1()
+   use pfunit_mod
+   use matrix_mul, only: mm
+   implicit none
+   real (kind=8), dimension(250,250) :: multiply
+   real (kind=8), dimension(250,300) :: first
+   real (kind=8), dimension(300,250) :: second
+
+   real (kind=8), dimension(250,250) :: m_to_compare
+
+   integer (kind=4) :: state
+
+   first = 17.0D0
+   second = 2.0D0
+
+   m_to_compare = 102.0D2
+
+   call mm(first, second, multiply, state)
+   @assertEqual(state, 0, 'State przy macierzach duzych 1.')
+   @assertEqual(multiply, m_to_compare,'Wynik mnozenia duzych 1.')
+
+end subroutine test_big_one1
+
+! macierz wieksza
+@test
+subroutine test_big_one2()
+   use pfunit_mod
+   use matrix_mul, only: mm
+   implicit none
+   real (kind=8), dimension(250,250) :: multiply
+   real (kind=8), dimension(250,500) :: first
+   real (kind=8), dimension(500,250) :: second
+
+   real (kind=8), dimension(250,250) :: m_to_compare
+
+   integer (kind=4) :: state
+
+   first = 17.0D0
+   second = 2.0D0
+
+   m_to_compare = 170.0D2
+
+   call mm(first, second, multiply, state)
+   @assertEqual(state, 0,'State przy macierzach duzych 2.')
+   @assertEqual(multiply, m_to_compare,'Wynik mnozenia duzych 2.')
+
+end subroutine test_big_one2
+
+! macierz najwieksza
+@test
+subroutine test_big_one3()
+   use pfunit_mod
+   use matrix_mul, only: mm
+   implicit none
+   real (kind=8), dimension(850,850) :: multiply
+   real (kind=8), dimension(850,600) :: first
+   real (kind=8), dimension(600,850) :: second
+
+   real (kind=8), dimension(850,850) :: m_to_compare
+
+   integer (kind=4) :: state
+
+   first = 17.0D0
+   second = 2.0D0
+
+   m_to_compare = 204.0D2
+
+   call mm(first, second, multiply, state)
+   @assertEqual(state, 0,'State przy macierzach duzych 3.')
+   @assertEqual(multiply, m_to_compare,'Wynik mnozenia duzych 3.')
+
+end subroutine test_big_one3
+
+! macierz wieksza niz najwieksza
+@test
+subroutine test_big_one4()
+   use pfunit_mod
+   use matrix_mul, only: mm
+   implicit none
+   real (kind=8), dimension(1500,1500) :: multiply
+   real (kind=8), dimension(1500,1000) :: first
+   real (kind=8), dimension(1000,1500) :: second
+
+   real (kind=8), dimension(1500,1500) :: m_to_compare
+
+   integer (kind=4) :: state
+
+   first = 17.0D0
+   second = 2.0D0
+
+   m_to_compare = 340.0D2
+
+   call mm(first, second, multiply, state)
+   @assertEqual(state, 0,'State przy macierzach duzych 4.')
+   @assertEqual(multiply, m_to_compare,'Wynik mnozenia duzych 4.')
+
+end subroutine test_big_one4
+
+! niepoprawne rozmiary macierzy
+@test
+subroutine test_not_correct()
+   use pfunit_mod
+   use matrix_mul, only: mm
+   implicit none
+   real (kind=8), dimension(1500,1500) :: multiply
+   real (kind=8), dimension(1500,101) :: first
+   real (kind=8), dimension(1000,1500) :: second
+
+   integer (kind=4) :: state
+
+   call mm(first, second, multiply, state)
+   @assertEqual(state, 1,'State przy macierzach o niepasujacych rozmiarach.')
+
+end subroutine test_not_correct
+
+
+! macierze malych rozmiarow, prostokatne
+@test
+subroutine test_simple_rectangle()
+   use pfunit_mod
+   use matrix_mul, only: mm
+   implicit none
+   real (kind=8), dimension(3,3) :: multiply1
+   real (kind=8), dimension(2,2) :: multiply2
+
+   integer (kind=4) :: state
+
+   call mm(RESHAPE((/1.0D0,2.0D0,3.0D0,4.0D0,5.0D0,6.0D0/),(/3,2/)), &
+           RESHAPE((/6.0D0,5.0D0,4.0D0,3.0D0,2.0D0,1.0D0/),(/2,3/)), &
+           multiply1, state)
+   @assertEqual(state, 0)
+   @assertEqual(multiply1, RESHAPE((/26.0D0,37.0D0,48.0D0,16.0D0,23.0D0,30.0D0,6.0D0,9.0D0,12.0D0/),(/3,3/)))
+
+   call mm(RESHAPE((/6.0D0,5.0D0,4.0D0,3.0D0,2.0D0,1.0D0/),(/2,3/)), &
+           RESHAPE((/1.0D0,2.0D0,3.0D0,4.0D0,5.0D0,6.0D0/),(/3,2/)), &
+           multiply2, state)
+   @assertEqual(state, 0, 'State proste prostokatne macierze.')
+   @assertEqual(multiply2, RESHAPE((/20.0D0,14.0D0,56.0D0,41.0D0/),(/2,2/)), 'Wynik proste prostokatne macierze.')
+
+end subroutine test_simple_rectangle
+
+! dodatkowe -> macierz wynikowa za mala by pomiescic wynik
+! niepoprawne rozmiary macierzy wynikowej
+@test
+subroutine test_not_correct2()
+   use pfunit_mod
+   use matrix_mul, only: mm
+   implicit none
+   real (kind=8), dimension(1500,1400) :: multiply
+   real (kind=8), dimension(1500,1000) :: first
+   real (kind=8), dimension(1000,1500) :: second
+
+   integer (kind=4) :: state
+
+   call mm(first, second, multiply, state)
+   @assertEqual(state, 2, 'State dodatek - zly rozmiar macierzy wynikowej.')
+
+end subroutine test_not_correct2
