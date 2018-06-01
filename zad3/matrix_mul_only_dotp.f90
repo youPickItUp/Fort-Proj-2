@@ -1,22 +1,19 @@
-#define SIZE 256
-
-module matrix_mul_only_cache
+module matrix_mul_only_dotp
 implicit none
 
-public mm1
+public mm2
 private
 
 contains
 
-    subroutine mm1(first, second, multiply, status)
+    subroutine mm2(first, second, multiply, status)
         implicit none
         real (kind = 8), intent(in) :: first(:,:) ! pierwsza macierz
         real (kind = 8), intent(in) :: second(:,:) ! druga macierz
         real (kind = 8), intent(out) :: multiply(:,:) ! macierz wynikowa
         integer (kind = 4), intent(out) :: status ! kod błędu, 0 gdy OK
 
-        integer(kind = 4) :: i, j, k, jj, kk ! zmienne incrementowane w petlach
-        integer (kind = 4) :: ichunk
+        integer (kind = 4) :: i,j ! zmienne incrementowane w petlach
 
         ! jezeli wymiary sie nie zgadzaja mnozenie nie ma sensu
         if(size(first, 2) .NE. size(second, 1)) then
@@ -35,23 +32,12 @@ contains
 
         multiply = 0
 
+        multiply_rows: do j=1, size(second, 2)
+            multiply_columns: do i=1, size(first, 1)
+                multiply(i,j)=dot_product(first(i,:),second(:,j))
+            end do multiply_columns
+        end do multiply_rows
 
-        ! use -funroll-loops
-        ichunk = 256
-        do jj = 1, size(second, 2), ichunk
-           do kk = 1,size(second, 1), ichunk
+    end subroutine
 
-              do j = jj, min(jj + ichunk - 1, size(second, 2))
-                 do k = kk, min(kk + ichunk - 1, size(second, 1))
-                    do i = 1, size(first, 1)
-                       multiply(i, j) = multiply(i, j) + first(i, k) * second(k, j)
-                    end do
-                 end do
-              end do
-
-           end do
-        end do
-
-    end subroutine mm1
-
-end module matrix_mul_only_cache
+end module matrix_mul_only_dotp

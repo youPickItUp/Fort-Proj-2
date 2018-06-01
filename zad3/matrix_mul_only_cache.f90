@@ -1,5 +1,3 @@
-#define SIZE 256
-
 module matrix_mul_only_cache
 implicit none
 
